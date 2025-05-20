@@ -1,4 +1,4 @@
-package br.com.fiap.fintech2.model;
+package br.com.fiap.model;
 
 import java.math.BigDecimal;
 
@@ -8,6 +8,10 @@ public class Conta {
     private String banco;
     private BigDecimal saldo;
     private TipoConta tipoConta;
+
+    public Object getId() {
+        return null;
+    }
 
     public enum TipoConta {
         CORRENTE("Conta Corrente"),
@@ -30,12 +34,12 @@ public class Conta {
         }
     }
 
-    public Conta(Long id, String nome, String banco, BigDecimal saldo, TipoConta tipoConta) {
-        this.idConta = id;
+    public Conta(int id, String nome, String banco, BigDecimal saldo, String tipoConta) {
+        this.idConta = (long) id;
         this.nomeConta = nome;
         this.banco = banco;
         this.saldo = saldo;
-        this.tipoConta = tipoConta;
+        this.tipoConta = TipoConta.valueOf(tipoConta);
     }
 
     // Getters e Setters
