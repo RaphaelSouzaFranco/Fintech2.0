@@ -1,12 +1,29 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="br.com.fiap.model.Conta" %>
 <%@page import="java.util.List" %>
-
-<html>
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-    <title>Cadastro de Contas</title>
+    <meta charset="UTF-8">
+    <title>Conta</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="resources/css/bootstrap.css">
+
+    <!-- Bootstrap Bundle com Popper -->
+    <link rel="stylesheet" href="resources/js/bootstrap.bundle.js">
+
+<!--Colocar css e js abaixo?-->
+    <link rel="stylesheet" href="resources/css/conta.css">
+
+    <script src="./resources/js/grafico.js"></script>
+
 </head>
+
 <body>
+
+<%@include file="header.jsp"%>
+
 <h1>Conta</h1>
 <div class="card">
     <table id="tabela-contas">
@@ -61,11 +78,8 @@
     </div>
 </div>
 
-<footer>
-    &copy; 2025 Finanças. Todos os direitos reservados.
-</footer>
-<!-- Seu script deve vir após o Chart.js -->
-<script src="./js/grafico.js"></script>
+<%@include file="footer.jsp"%>
+
 </body>
 </html>
 

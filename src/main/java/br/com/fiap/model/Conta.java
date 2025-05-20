@@ -9,6 +9,9 @@ public class Conta {
     private BigDecimal saldo;
     private TipoConta tipoConta;
 
+    public Conta(Long id, String nome, String banco, BigDecimal saldo, TipoConta tipoConta) {
+    }
+
     public Object getId() {
         return null;
     }
