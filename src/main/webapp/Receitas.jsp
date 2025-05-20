@@ -11,10 +11,13 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
+
+<%@include file="header.jsp"%>
+
 <div class="container mt-4">
 
   <h2 class="mb-4">Cadastrar Receita</h2>
-  <form method="post" action="receitas.jsp">
+  <form method="post" action="./Receitas.jsp">
     <div class="row">
       <div class="col-md-4 mb-3">
         <label class="form-label">Valor</label>
@@ -60,7 +63,7 @@
 
   <!-- PESQUISAR RECEITA POR ID -->
   <h3>Pesquisar Receita por ID</h3>
-  <form method="get" action="receitas.jsp" class="mb-4">
+  <form method="get" action="./Receitas.jsp" class="mb-4">
     <div class="input-group w-50">
       <input type="number" class="form-control" name="buscarId" placeholder="Digite o ID da receita" required>
       <button class="btn btn-primary" type="submit">Buscar</button>
