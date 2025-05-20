@@ -10,12 +10,12 @@
 <html lang="pt-BR">
 
 <head>
-  <title>Capital Quest - Login</title>
+  <title>Fintech - Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
-<body class="bg-light">
 <%@include file="header.jsp" %>
+<body class="bg-light">
+
 <div class="container d-flex justify-content-center align-items-center vh-100">
   <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
     <h3 class="text-center mb-4">Seja bem-vindo</h3>
