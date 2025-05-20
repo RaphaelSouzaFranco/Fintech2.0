@@ -4,6 +4,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="br.com.fiap.exception.EntidadeNaoEncontrada" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -17,7 +18,7 @@
 <div class="container mt-4">
 
   <h2 class="mb-4">Cadastrar Receita</h2>
-  <form method="post" action="./Receitas.jsp">
+  <form method="post" action="receitas">
     <div class="row">
       <div class="col-md-4 mb-3">
         <label class="form-label">Valor</label>
@@ -63,68 +64,41 @@
 
   <!-- PESQUISAR RECEITA POR ID -->
   <h3>Pesquisar Receita por ID</h3>
-  <form method="get" action="./Receitas.jsp" class="mb-4">
+  <form method="get" action="receitas" class="mb-4">
     <div class="input-group w-50">
       <input type="number" class="form-control" name="buscarId" placeholder="Digite o ID da receita" required>
       <button class="btn btn-primary" type="submit">Buscar</button>
     </div>
   </form>
 
-  <%
-    // Inserção
-    String valorStr = request.getParameter("valor");
-    if (valorStr != null) {
-      try {
-        ReceitasDAO dao = new ReceitasDAO();
-        Receitas receita = new Receitas();
-        receita.setValor(Double.parseDouble(valorStr));
-        receita.setData_Recebimento(Date.valueOf(request.getParameter("data_Recebimento")));
-        receita.setDescricao(request.getParameter("descricao"));
-        receita.setCategoria_Receita(request.getParameter("categoria_Receita"));
-        receita.setFormaPagamento(request.getParameter("forma_Pagamento"));
-        receita.setStatus(request.getParameter("status"));
-        receita.setConta_id_conta(Integer.parseInt(request.getParameter("conta_id_conta")));
-        receita.setUsuario_id_usuario(Integer.parseInt(request.getParameter("usuario_id_usuario")));
-        dao.insert(receita);
-        out.println("<div class='alert alert-success'>Receita cadastrada com sucesso!</div>");
-      } catch (Exception e) {
-        out.println("<div class='alert alert-danger'>Erro ao cadastrar receita: " + e.getMessage() + "</div>");
-      }
-    }
+  <!-- Mensagens -->
+  <c:if test="${not empty mensagemSucesso}">
+    <div class="alert alert-success">${mensagemSucesso}</div>
+  </c:if>
+  <c:if test="${not empty mensagemAviso}">
+    <div class="alert alert-warning">${mensagemAviso}</div>
+  </c:if>
+  <c:if test="${not empty mensagemErro}">
+    <div class="alert alert-danger">${mensagemErro}</div>
+  </c:if>
 
-    // Pesquisa por ID
-    String buscarId = request.getParameter("buscarId");
-    if (buscarId != null) {
-      try {
-        int idBusca = Integer.parseInt(buscarId);
-        ReceitasDAO dao = new ReceitasDAO();
-        Receitas receita = dao.pesquisar(idBusca);
-  %>
-  <h4>Resultado da busca:</h4>
-  <ul class="list-group w-75 mb-4">
-    <li class="list-group-item"><strong>ID:</strong> <%= receita.getId_Receitas() %></li>
-    <li class="list-group-item"><strong>Valor:</strong> R$ <%= receita.getValor() %></li>
-    <li class="list-group-item"><strong>Data:</strong> <%= receita.getData_Recebimento() %></li>
-    <li class="list-group-item"><strong>Categoria:</strong> <%= receita.getCategoria_Receita() %></li>
-    <li class="list-group-item"><strong>Descrição:</strong> <%= receita.getDescricao() %></li>
-    <li class="list-group-item"><strong>Status:</strong> <%= receita.getStatus() %></li>
-    <li class="list-group-item"><strong>Forma Pagamento:</strong> <%= receita.getForma_Pagamento() %></li>
-    <li class="list-group-item"><strong>Conta ID:</strong> <%= receita.getConta_id_conta() %></li>
-    <li class="list-group-item"><strong>Usuário ID:</strong> <%= receita.getUsuario_id_usuario() %></li>
-  </ul>
-  <%
-      } catch (EntidadeNaoEncontrada e) {
-        out.println("<div class='alert alert-warning'>Receita não encontrada.</div>");
-      } catch (Exception e) {
-        out.println("<div class='alert alert-danger'>Erro: " + e.getMessage() + "</div>");
-      }
-    }
+  <!-- Resultado da busca por ID -->
+  <c:if test="${not empty receitaBuscada}">
+    <h4>Resultado da busca:</h4>
+    <ul class="list-group w-75 mb-4">
+      <li class="list-group-item"><strong>ID:</strong> ${receitaBuscada.id_Receitas}</li>
+      <li class="list-group-item"><strong>Valor:</strong> R$ ${receitaBuscada.valor}</li>
+      <li class="list-group-item"><strong>Data:</strong> ${receitaBuscada.data_Recebimento}</li>
+      <li class="list-group-item"><strong>Categoria:</strong> ${receitaBuscada.categoria_Receita}</li>
+      <li class="list-group-item"><strong>Descrição:</strong> ${receitaBuscada.descricao}</li>
+      <li class="list-group-item"><strong>Status:</strong> ${receitaBuscada.status}</li>
+      <li class="list-group-item"><strong>Forma Pagamento:</strong> ${receitaBuscada.forma_Pagamento}</li>
+      <li class="list-group-item"><strong>Conta ID:</strong> ${receitaBuscada.conta_id_conta}</li>
+      <li class="list-group-item"><strong>Usuário ID:</strong> ${receitaBuscada.usuario_id_usuario}</li>
+    </ul>
+  </c:if>
 
-    // Listagem geral
-    try {
-      ReceitasDAO dao = new ReceitasDAO();
-      List<Receitas> receitas = dao.listar();
-  %>
+  <!-- Listagem geral -->
   <h3>Todas as Receitas</h3>
   <table class="table table-striped table-bordered mt-3">
     <thead class="table-dark">
@@ -141,27 +115,22 @@
     </tr>
     </thead>
     <tbody>
-    <% for (Receitas r : receitas) { %>
-    <tr>
-      <td><%= r.getId_Receitas() %></td>
-      <td>R$ <%= r.getValor() %></td>
-      <td><%= r.getData_Recebimento() %></td>
-      <td><%= r.getDescricao() %></td>
-      <td><%= r.getCategoria_Receita() %></td>
-      <td><%= r.getForma_Pagamento() %></td>
-      <td><%= r.getStatus() %></td>
-      <td><%= r.getConta_id_conta() %></td>
-      <td><%= r.getUsuario_id_usuario() %></td>
-    </tr>
-    <% } %>
+    <c:forEach var="r" items="${receitas}">
+      <tr>
+        <td>${r.id_Receitas}</td>
+        <td>R$ ${r.valor}</td>
+        <td>${r.data_Recebimento}</td>
+        <td>${r.descricao}</td>
+        <td>${r.categoria_Receita}</td>
+        <td>${r.forma_Pagamento}</td>
+        <td>${r.status}</td>
+        <td>${r.conta_id_conta}</td>
+        <td>${r.usuario_id_usuario}</td>
+      </tr>
+    </c:forEach>
     </tbody>
   </table>
-  <%
-    } catch (Exception e) {
-      out.println("<div class='alert alert-danger'>Erro ao listar receitas: " + e.getMessage() + "</div>");
-    }
-  %>
-
 </div>
+<%@include file="footer.jsp"%>
 </body>
 </html>
