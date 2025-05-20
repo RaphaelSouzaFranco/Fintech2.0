@@ -89,7 +89,7 @@ public class Receitas {
     }
 
     public void setFormaPagamento(String formaPagamento) {
-        this.forma_Pagamento = forma_Pagamento;
+        this.forma_Pagamento = formaPagamento;
     }
 
     public int getId_Receitas() {

@@ -15,7 +15,12 @@ public class ConnectionFactory {
 
     // método para obter uma conexão com o banco de dados
 
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException, ClassNotFoundException {
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Driver JDBC não encontrado", e);
+        }
         return DriverManager.getConnection(URL, USUARIO, SENHA);
     }
 
