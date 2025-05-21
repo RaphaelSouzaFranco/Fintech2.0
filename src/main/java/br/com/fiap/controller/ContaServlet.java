@@ -1,58 +1,87 @@
 package br.com.fiap.controller;
 
+import br.com.fiap.dao.ContaDAO;
+import br.com.fiap.exception.EntidadeNaoEncontrada;
 import br.com.fiap.model.Conta;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
-
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
 
 @WebServlet("/conta")
 public class ContaServlet extends HttpServlet {
 
-    //Lista de contas na mémoria (igual "banco de dados")
-    private static List<Conta> contas = new ArrayList<>();
+    private ContaDAO contaDAO;
 
-    //Método para lidar com POST(Cadastro)
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        //Pegando dados do formulário HTML
-        Long id = Long.parseLong(request.getParameter("id"));
-        String nomeConta = request.getParameter("nomeConta");
-        String banco = request.getParameter("banco");
-        BigDecimal saldo = new BigDecimal(request.getParameter("saldo"));
-        String tipoConta = request.getParameter("tipoConta");
-
-        //Criando a conta
-        Conta novaConta = new Conta(Math.toIntExact(id), nomeConta, banco, saldo, tipoConta);
-
-        //Adicionanando na lista
-        contas.add(novaConta);
-
-        //Redirecionando para uma pagina que lista as contas
-        request.setAttribute("conta", novaConta);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("conta.jsp");
-        dispatcher.forward(request, response);
-
+    public void init() throws ServletException {
+        try {
+            // Criar uma implementação concreta do ContaDAO
+            contaDAO = new ContaDAO() {
+                @Override
+                public void close() throws SQLException {
+                    super.close();
+                }
+            };
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new ServletException("Erro ao inicializar ContaDAO", e);
+        }
     }
 
-    //Método para remover uma conta via GET (passando ID na URL)
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String idString = request.getParameter("id");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String action = request.getParameter("action");
 
-        if (idString != null) {
-            Long id = Long.parseLong(idString); //Convertendo para Long
-            contas.removeIf(conta ->conta.getId().equals(id)); //Usando equals() para comparação de Long
+            if ("remover".equals(action)) {
+                Long id = Long.parseLong(request.getParameter("id"));
+                try {
+                    contaDAO.remover(id);
+                    request.setAttribute("mensagem", "Conta removida com sucesso!");
+                } catch (EntidadeNaoEncontrada e) {
+                    request.setAttribute("erro", "Conta não encontrada.");
+                } catch (SQLException e) {
+                    request.setAttribute("erro", "Erro ao remover conta: " + e.getMessage());
+                }
+            }
 
+            List<Conta> contas = contaDAO.listar();
+            request.setAttribute("contas", contas);
+            request.getRequestDispatcher("conta.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("erro", "Erro ao processar solicitação: " + e.getMessage());
+            request.getRequestDispatcher("conta.jsp").forward(request, response);
         }
+    }
 
-        request.setAttribute("contas", contas);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("conta.jsp");
-        dispatcher.forward(request, response);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String nomeConta = request.getParameter("nomeConta");
+            String banco = request.getParameter("banco");
+            BigDecimal saldo = new BigDecimal(request.getParameter("saldo"));
+            String tipoContaStr = request.getParameter("tipoConta");
+
+            Conta.TipoConta tipoConta = Conta.TipoConta.valueOf(tipoContaStr);
+
+            Conta novaConta = new Conta(null, nomeConta, banco, saldo, tipoConta);
+            contaDAO.cadastrar(novaConta);
+
+            response.sendRedirect("conta");
+
+        } catch (Exception e) {
+            request.setAttribute("erro", "Erro ao cadastrar conta: " + e.getMessage());
+            doGet(request, response);
+        }
     }
 }

@@ -1,79 +1,75 @@
- body {
-     font-family: Arial, sans-serif;
-     background: #f4f4f4;
-     margin: 0;
-     padding: 20px;
- }
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
 
- h1 {
-     text-align: center;
-     margin-bottom: 30px;
- }
+.container {
+    min-height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    padding-bottom: 60px; /* altura do footer + margem extra */
+}
 
- .dashboard {
-     display: grid;
-     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-     gap: 20px;
- }
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
 
- .card {
-     background: #fff;
-     border-radius: 10px;
-     padding: 20px;
-     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
- }
+.card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
 
- .card h2 {
-     margin-top: 0;
-     font-size: 18px;
-     display: ce;
- }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
 
- table {
-     width: 100%;
-     border-collapse: collapse;
- }
-
- table th,
- table td {
-     padding: 8px;
-     text-align: left;
-     border-bottom: 1px solid #ccc;
- }
-
- .highlight {
-     font-weight: bold;
-     font-size: 20px;
-     color: green;
- }
+table th,
+table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+}
 
 .grafico-container {
     width: 100%;
-    max-width: 500px;  /* Diminuímos o máximo */
+    max-width: 500px;
     margin: 20px auto;
 }
 
 .grafico {
     width: 100%;
-    height: 350px;  /* Altura reduzida */
+    height: 350px;
     padding: 15px;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.graficoPizza {
-    width: 100% !important;
-    height: 100% !important;
+#graficoPizza {
+    max-height: 300px !important;
 }
 
- footer {
-     margin-top: 30px;
-     padding: 15px;
-     color: #777;
-     font-size: 14px;
- }
- /* Estilos para o botão e formulário de nova conta */
+footer {
+    position: relative;
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    background: #fff;
+    color: #777;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
 .botao-adicionar {
     background-color: #4CAF50;
     color: white;
@@ -82,11 +78,6 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-    width: 100%;
-}
-
-.botao-adicionar:hover {
-    background-color: #45a049;
 }
 
 .input-form {
@@ -107,20 +98,21 @@
     cursor: pointer;
 }
 
-.botao-confirmar:hover {
-    background-color: #0b7dda;
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
 }
 
 @media (max-width: 600px) {
     .grafico {
         height: 300px;
     }
-    
+
     .grafico-container {
         max-width: 90%;
-    }
-    
-    .grafico h2 {
-        font-size: 1.1rem;
     }
 }
