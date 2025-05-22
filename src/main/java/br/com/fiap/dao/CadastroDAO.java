@@ -26,6 +26,8 @@ public class CadastroDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Erro ao cadastrar no banco", e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

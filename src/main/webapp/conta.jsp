@@ -8,7 +8,7 @@
     <title>Conta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="resources/css/conta.css">
-</head>
+</head><link rel="stylesheet" href="resources/css/conta.css">
 <body>
 <%@include file="header.jsp"%>
 
