@@ -12,7 +12,11 @@ public class ContaDAO implements AutoCloseable {
     private Connection conexao;
 
     public ContaDAO() throws SQLException {
-        conexao = ConnectionFactory.getConnection();
+        try {
+            conexao = ConnectionFactory.getConnection();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void cadastrar(Conta conta) throws SQLException {
