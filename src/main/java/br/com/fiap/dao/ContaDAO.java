@@ -11,7 +11,7 @@ import java.util.List;
 public class ContaDAO implements AutoCloseable {
     private Connection conexao;
 
-    public ContaDAO() throws SQLException {
+    public ContaDAO() throws SQLException, ClassNotFoundException {
         conexao = ConnectionFactory.getConnection();
     }
 

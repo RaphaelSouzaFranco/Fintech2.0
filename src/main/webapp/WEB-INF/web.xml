@@ -3,18 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
-<<<<<<< HEAD:src/main/webapps/WEB-INF/web.xml
-    <welcome-file-list>
-        <welcome-file>conta.jsp</welcome-file>
-    </welcome-file-list>
-</web-app>
-=======
 
     <welcome-file-list>
-        <welcome-file>login.jsp</welcome-file>
-    </welcome-file-list>
+        <welcome-file>Divida.jsp</welcome-file>
 
+    </welcome-file-list>
 
 </web-app>
 
->>>>>>> e3218bb17f75f8f382ca3a780478edbe873c0dd6:src/main/webapp/WEB-INF/web.xml
+
