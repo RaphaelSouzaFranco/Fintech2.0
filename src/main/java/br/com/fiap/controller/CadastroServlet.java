@@ -1,52 +1,57 @@
-package br.com.fiap.servlet;
+package br.com.fiap.controller;
 
 import br.com.fiap.dao.CadastroDAO;
+import br.com.fiap.model.Usuario;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet("/CadastroServlet")
+@WebServlet("/cadastrar")
 public class CadastroServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String nome = request.getParameter("nome");
-        String sobrenome = request.getParameter("sobrenome");
-        String dataNascimento = request.getParameter("dataNascimento");
         String email = request.getParameter("email");
         String senha = request.getParameter("senha");
-        String genero = request.getParameter("genero");
+        String confirmarSenha = request.getParameter("confirmarSenha");
 
-        String mensagem;
-        boolean sucesso = false;
+        CadastroDAO dao = new CadastroDAO();
 
-        if (nome.isEmpty() || sobrenome.isEmpty() || dataNascimento.isEmpty() ||
-                email.isEmpty() || senha.isEmpty() || genero.isEmpty()) {
-
-            mensagem = "Todos os campos são obrigatórios!";
-        } else {
-            try {
-                CadastroDAO dao = new CadastroDAO();
-                dao.cadastrar(nome, sobrenome, dataNascimento, email, senha, genero);
-                mensagem = "Cadastro realizado com sucesso!";
-                sucesso = true;
-            } catch (Exception e) {
-                mensagem = "Erro ao cadastrar: " + e.getMessage();
+        try {
+            // Validações
+            if (nome == null || email == null || senha == null || confirmarSenha == null ||
+                    nome.trim().isEmpty() || email.trim().isEmpty() || senha.trim().isEmpty()) {
+                request.setAttribute("erro", "Todos os campos são obrigatórios!");
+                request.getRequestDispatcher("cadastro.jsp").forward(request, response);
+                return;
             }
+
+            if (!senha.equals(confirmarSenha)) {
+                request.setAttribute("erro", "As senhas não correspondem!");
+                request.getRequestDispatcher("cadastro.jsp").forward(request, response);
+                return;
+            }
+
+            if (dao.emailExiste(email)) {
+                request.setAttribute("erro", "Este email já está cadastrado!");
+                request.getRequestDispatcher("cadastro.jsp").forward(request, response);
+                return;
+            }
+
+            // Criação do usuário
+            Usuario usuario = new Usuario(nome, email, senha);
+            dao.cadastrar(usuario);
+
+            request.setAttribute("sucesso", "Cadastro realizado com sucesso! Faça seu login.");
+            response.sendRedirect("login");
+
+        } catch (Exception e) {
+            request.setAttribute("erro", "Erro ao realizar cadastro: " + e.getMessage());
+            request.getRequestDispatcher("cadastro.jsp").forward(request, response);
         }
-
-        HttpSession session = request.getSession();
-        session.setAttribute("mensagem", mensagem);
-        session.setAttribute("sucesso", sucesso);
-
-        if (sucesso) {
-            response.sendRedirect("outraPagina.jsp");
-        } else {
-            response.sendRedirect("cadastro.jsp");
-        }
-
     }
 }
