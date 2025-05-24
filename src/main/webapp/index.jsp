@@ -74,7 +74,7 @@
                     <i class="fas fa-credit-card fa-3x mb-3 text-warning"></i>
                     <h3 class="card-title">Dívidas</h3>
                     <p class="card-text">Acompanhe suas dívidas e prazos de pagamento.</p>
-                    <a href="${pageContext.request.contextPath}/dividas" class="btn btn-warning">Acessar</a>
+                    <a href="${pageContext.request.contextPath}/Divida.jsp" class="btn btn-warning">Acessar</a>
                 </div>
             </div>
         </div>

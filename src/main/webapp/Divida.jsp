@@ -49,7 +49,7 @@
 
     <div class="row">
       <div class="col-md-4 mb-3">
-        <label class="form-label">Status (ex: Paga ou Em Andamento)</label>
+        <label class="form-label">Status (ex: Paga ou Em Aberto)</label>
         <input type="text" class="form-control" name="status_divida" required>
       </div>
       <div class="col-md-4 mb-3">
