@@ -18,7 +18,8 @@ public class Despesa {
 
     public Despesa() {}
 
-    // Getters e Setters
+    // getters e setters
+
     public int getIdDespesa() {
         return idDespesa;
     }
@@ -107,7 +108,7 @@ public class Despesa {
         this.contaId = contaId;
     }
 
-    // Métodos auxiliares para o JSP
+    // métodos auxiliares para o JSP
     public String getNome() {
         return this.descricao;
     }

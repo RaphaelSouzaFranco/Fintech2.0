@@ -59,7 +59,7 @@
                     <i class="fas fa-circle-minus fa-3x mb-3 text-danger"></i>
                     <h3 class="card-title">Despesas</h3>
                     <p class="card-text">Controle seus gastos e mantenha suas despesas organizadas.</p>
-                    <a href="${pageContext.request.contextPath}/despesas" class="btn btn-danger">
+                    <a href="${pageContext.request.contextPath}/despesa" class="btn btn-danger">
                         <i class="fas fa-minus-circle me-2"></i>Gerenciar Despesas
                     </a>
                 </div>

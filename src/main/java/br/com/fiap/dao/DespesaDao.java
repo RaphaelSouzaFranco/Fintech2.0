@@ -15,7 +15,7 @@ public class DespesaDao {
         conexao = ConnectionFactory.getConnection();
     }
 
-    public void inserir(Despesa despesa) throws SQLException {
+    public void cadastrar(Despesa despesa) throws SQLException {
         String sql = "INSERT INTO DESPESA (ID_DESPESA, VALOR, DATA_PAGAMENTO, VENCIMENTO, DESCRICAO, " +
                 "CATEGORIA_DESPESA, FORMA_PAGAMENTO, STATUS_DESPESA, RECORRENTE, USUARIO_ID_USUARIO, CONTA_ID_CONTA) " +
                 "VALUES (seq_despesa.nextval, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -23,7 +23,8 @@ public class DespesaDao {
         try (PreparedStatement stm = conexao.prepareStatement(sql)) {
             stm.setBigDecimal(1, despesa.getValor());
             stm.setDate(2, new Date(despesa.getDataPagamento().getTime()));
-            stm.setDate(3, new Date(despesa.getVencimento().getTime()));
+            stm.setDate(3, despesa.getVencimento() != null ?
+                    new Date(despesa.getVencimento().getTime()) : null);
             stm.setString(4, despesa.getDescricao());
             stm.setString(5, despesa.getCategoriaDespesa());
             stm.setString(6, despesa.getFormaPagamento());
@@ -32,7 +33,15 @@ public class DespesaDao {
             stm.setInt(9, despesa.getUsuarioId());
             stm.setInt(10, despesa.getContaId());
 
-            stm.executeUpdate();
+            System.out.println("Executando: " + stm.toString()); // Log da query
+
+            int linhasAfetadas = stm.executeUpdate();
+            System.out.println("Linhas afetadas: " + linhasAfetadas);
+
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao cadastrar: " + e.getMessage());
+            throw e;
         }
     }
 
@@ -66,14 +75,18 @@ public class DespesaDao {
         }
     }
 
-    public void removerPorDescricao(String descricao) throws SQLException {
-        String sql = "DELETE FROM DESPESA WHERE DESCRICAO = ?";
+    public void removerPorId(int id) throws SQLException {
+        String sql = "DELETE FROM DESPESA WHERE ID_DESPESA = ?";
+
         try (PreparedStatement stm = conexao.prepareStatement(sql)) {
-            stm.setString(1, descricao);
-            int rows = stm.executeUpdate();
-            if (rows == 0) {
-                throw new SQLException("Nenhuma despesa encontrada para remover");
+            stm.setInt(1, id);
+            int linhasAfetadas = stm.executeUpdate();
+
+            if (linhasAfetadas == 0) {
+                throw new SQLException("Nenhuma despesa encontrada com o ID " + id);
             }
+
+            System.out.println("Despesa com ID " + id + " removida com sucesso");
         }
     }
 
@@ -100,6 +113,46 @@ public class DespesaDao {
         despesa.setContaId(result.getInt("CONTA_ID_CONTA"));
         return despesa;
     }
+
+    public Despesa pesquisarPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM DESPESA WHERE ID_DESPESA = ?";
+
+        try (PreparedStatement stm = conexao.prepareStatement(sql)) {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                return parseDespesa(rs);
+            }
+            throw new SQLException("Despesa não encontrada com ID: " + id);
+        }
+    }
+
+    public void editar(Despesa despesa) throws SQLException {
+        String sql = "UPDATE DESPESA SET DESCRICAO=?, VALOR=?, DATA_PAGAMENTO=?, " +
+                "VENCIMENTO=?, CATEGORIA_DESPESA=?, FORMA_PAGAMENTO=?, " +
+                "STATUS_DESPESA=?, RECORRENTE=? WHERE ID_DESPESA=?";
+
+        try (PreparedStatement stm = conexao.prepareStatement(sql)) {
+            stm.setString(1, despesa.getDescricao());
+            stm.setBigDecimal(2, despesa.getValor());
+            stm.setDate(3, new java.sql.Date(despesa.getDataPagamento().getTime()));
+            if (despesa.getVencimento() != null) {
+                stm.setDate(4, new java.sql.Date(despesa.getVencimento().getTime()));
+            } else {
+                stm.setNull(4, java.sql.Types.DATE);
+            }
+            stm.setString(5, despesa.getCategoriaDespesa());
+            stm.setString(6, despesa.getFormaPagamento());
+            stm.setString(7, despesa.getStatusDespesa());
+            stm.setString(8, String.valueOf(despesa.getRecorrente()));
+            stm.setInt(9, despesa.getIdDespesa());
+
+            stm.executeUpdate();
+        }
+    }
+
+
 
     public void fecharConexao() throws SQLException {
         if (conexao != null && !conexao.isClosed()) {

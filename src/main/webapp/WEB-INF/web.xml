@@ -8,8 +8,8 @@
         <welcome-file>conta.jsp</welcome-file>
         <welcome-file>divida.jsp</welcome-file>
         <welcome-file>login.jsp</welcome-file>
+        <welcome-file>despesa.jsp</welcome-file>
     </welcome-file-list>
-
 
 </web-app>
 
