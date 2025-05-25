@@ -141,24 +141,73 @@
                 <h3 class="mb-4">Editar Despesa</h3>
                 <form action="despesa" method="post" class="row g-3">
                     <input type="hidden" name="acao" value="editar">
-                    <input type="hidden" name="idDespesa" value="${despesa.idDespesa}" />
-                    <input type="text" name="descricao" value="${despesa.descricao}" required /><br>
-                    <input type="number" step="0.01" name="valor" value="${despesa.valor}" required /><br>
-                    <input type="date" name="dataPagamento" value="${despesa.dataPagamento}" required /><br>
-                    <input type="date" name="vencimento" value="${despesa.vencimento}" /><br>
+                    <div class="col-md-6">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <input type="text" id="descricao" name="descricao" class="form-control" placeholder="Descrição da Despesa" required>
+                    </div>
 
-                    <input type="text" name="categoriaDespesa" value="${despesa.categoriaDespesa}" required /><br>
-                    <input type="text" name="formaPagamento" value="${despesa.formaPagamento}" required /><br>
-                    <input type="text" name="statusDespesa" value="${despesa.statusDespesa}" required /><br>
+                    <div class="col-md-3">
+                        <label for="valor" class="form-label">Valor (R$)</label>
+                        <input type="number" step="0.01" id="valor" name="valor" class="form-control" required>
+                    </div>
 
-                    <select name="recorrente">
-                        <option value="S" ${despesa.recorrente == 'S' ? 'selected' : ''}>Sim</option>
-                        <option value="N" ${despesa.recorrente == 'N' ? 'selected' : ''}>Não</option>
-                    </select><br>
+                    <div class="col-md-3">
+                        <label for="dataPagamento" class="form-label">Data do Pagamento</label>
+                        <input type="date" id="dataPagamento" name="dataPagamento" class="form-control" required>
+                    </div>
 
-                    <button type="submit">Salvar</button>
-                    <button type="button" onclick="window.location.href='despesa'">Cancelar</button>
+                    <div class="col-md-3">
+                        <label for="vencimento" class="form-label">Data do Vencimento</label>
+                        <input type="date" id="vencimento" name="vencimento" class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Categoria</label>
+                        <select name="categoria_despesa" class="form-select" required>
+                            <option value="">Selecione</option>
+                            <option value="Alimentação">Alimentação</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Lazer">Lazer</option>
+                            <option value="Educação">Educação</option>
+                            <option value="Investimento">Investimento</option>
+                            <option value="Saúde">Saúde</option>
+                            <option value="Moradia">Moradia</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Forma de Pagamento</label>
+                        <select name="forma_pagamento" class="form-select" required>
+                            <option value="">Selecione</option>
+                            <option value="Cartão">Cartão</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="PIX">PIX</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Status</label>
+                        <select name="status_despesa" class="form-select" required>
+                            <option value="PENDENTE">Pendente</option>
+                            <option value="PAGO">Pago</option>
+                            <option value="ATRASADO">Atrasado</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Recorrente?</label>
+                        <select name="recorrente" class="form-select" required>
+                            <option value="">Selecione</option>
+                            <option value="S">Sim</option>
+                            <option value="N">Não</option>
+                        </select>
+                    </div>
                 </form>
+                <div class="col-md-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success me-2">Salvar</button>
+                    <button type="reset" class="btn btn-danger">Cancelar</button>
+                </div>
             </div>
         </c:if>
     </div>
@@ -169,7 +218,8 @@
 
         <form action="despesa" method="get">
             <input type="hidden" name="acao" value="pesquisar">
-            <input type="text" name="termo" class="form-control" placeholder="Pesquisar por nome...">
+            <input type="text" name="termo" class="form-control" placeholder="Pesquisar por descrição">
+
             <button class="btn btn-outline-secondary" type="submit">Pesquisar</button>
         </form>
 
