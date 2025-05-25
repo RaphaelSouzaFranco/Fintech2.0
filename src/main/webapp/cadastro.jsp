@@ -1,55 +1,90 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%
-    String mensagem = null;
-    Boolean sucesso = null;
-    if (session.getAttribute("mensagem") != null) {
-        mensagem = (String) session.getAttribute("mensagem");
-        sucesso = (Boolean) session.getAttribute("sucesso");
-        session.removeAttribute("mensagem");
-        session.removeAttribute("sucesso");
-    }
-%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<html>
-<head><title>Cadastro</title></head>
-<body>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="resources/css/bootstrap.css" >
+<!-- Bootstrap Bundle JS -->
+<script src="resources/js/bootstrap.bundle.js"></script>
 
-<h2>Cadastro de Conta</h2>
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-<% if (mensagem != null) { %>
-<p style="color:<%= (sucesso != null && sucesso) ? "green" : "red" %>;">
-    <strong><%= mensagem %></strong>
-</p>
-<% } %>
+<head>
+    <title>Fintech - Cadastro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<%@include file="header.jsp" %>
+<body class="bg-light">
 
-<% if (sucesso == null || !sucesso) { %>
-<form action="CadastroServlet" method="post">
-    <label>Nome:</label>
-    <input type="text" name="nome" required><br><br>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
+        <h3 class="text-center mb-4">Criar Conta</h3>
 
-    <label>Sobrenome:</label>
-    <input type="text" name="sobrenome" required><br><br>
+        <!-- MENSAGEM DE ERRO -->
+        <c:if test="${not empty erro}">
+            <div class="alert alert-danger text-center">
+                    ${erro}
+            </div>
+        </c:if>
 
-    <label>Data de Nascimento:</label>
-    <input type="date" name="dataNascimento" required><br><br>
+        <!-- MENSAGEM DE SUCESSO -->
+        <c:if test="${not empty sucesso}">
+            <div class="alert alert-success text-center">
+                    ${sucesso}
+            </div>
+        </c:if>
 
-    <label>Email:</label>
-    <input type="email" name="email" required><br><br>
-
-    <label>Senha:</label>
-    <input type="password" name="senha" required><br><br>
-
-    <label>Gênero:</label>
-    <select name="genero" required>
-        <option value="">Selecione</option>
-        <option value="Masculino">Masculino</option>
-        <option value="Feminino">Feminino</option>
-        <option value="Outro">Outro</option>
-    </select><br><br>
-
-    <input type="submit" value="Cadastrar">
-</form>
-<% } %>
-
+        <form action="cadastrar" method="post">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome Completo</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        id="nome"
+                        name="nome"
+                        placeholder="Digite seu nome completo"
+                        required
+                        autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="Digite seu email"
+                        required>
+            </div>
+            <div class="mb-3">
+                <label for="senha" class="form-label">Senha</label>
+                <input
+                        type="password"
+                        class="form-control"
+                        id="senha"
+                        name="senha"
+                        placeholder="Digite sua senha"
+                        required>
+            </div>
+            <div class="mb-3">
+                <label for="confirmarSenha" class="form-label">Confirmar Senha</label>
+                <input
+                        type="password"
+                        class="form-control"
+                        id="confirmarSenha"
+                        name="confirmarSenha"
+                        placeholder="Confirme sua senha"
+                        required>
+            </div>
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </div>
+        </form>
+        <div class="text-center">
+            <small>Já possui conta? <a href="login.jsp">Fazer login</a></small>
+        </div>
+    </div>
+</div>
+<%@include file="footer.jsp" %>
 </body>
 </html>

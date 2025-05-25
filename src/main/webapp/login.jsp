@@ -61,7 +61,7 @@
       </div>
     </form>
     <div class="text-center">
-      <small>Não possui cadastro? <a href="#">Cadastre-se aqui</a></small>
+      <small>Não possui cadastro? <a href="cadastro.jsp">Cadastre-se aqui</a></small>
     </div>
   </div>
 </div>
