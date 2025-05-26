@@ -47,6 +47,21 @@
 
 <div class="container mt-5">
 
+    <!--Feedback ao usuario> -->
+    <c:if test="${not empty mensagem}">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+            ${mensagem}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    </c:if>
+
+    <c:if test="${not empty erro}">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            ${erro}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    </c:if>
+
     <h2 class="mb-4 text-center">💳 Fintech - Gerenciamento de Despesas</h2>
 
     <!-- resumo -->
@@ -64,6 +79,8 @@
         <h5 class="mb-3">Adicionar Nova Despesa</h5>
         <form action="despesa" method="post" class="row g-3">
             <input type="hidden" name="acao" value="cadastrar">
+            <input type="hidden" name="usuario_id" value="1">
+            <input type="hidden" name="conta_id" value="1">
 
             <div class="col-md-6">
                 <label for="descricao" class="form-label">Descrição</label>
@@ -140,7 +157,11 @@
             <div class="card p-4">
                 <h3 class="mb-4">Editar Despesa</h3>
                 <form action="despesa" method="post" class="row g-3">
-                    <input type="hidden" name="acao" value="editar">
+                    <input type="hidden" name="acao" value="atualizar">
+                    <input type="hidden" name="id" value="${despesaEdicao.idDespesa}">
+                    <input type="hidden" name="usuario_id" value="${despesaEdicao.usuarioId}">
+                    <input type="hidden" name="conta_id" value="${despesaEdicao.contaId}">
+
                     <div class="col-md-6">
                         <label for="descricao" class="form-label">Descrição</label>
                         <input type="text" id="descricao" name="descricao" class="form-control" placeholder="Descrição da Despesa" required>
@@ -160,7 +181,6 @@
                         <label for="vencimento" class="form-label">Data do Vencimento</label>
                         <input type="date" id="vencimento" name="vencimento" class="form-control">
                     </div>
-
                     <div class="col-md-3">
                         <label class="form-label">Categoria</label>
                         <select name="categoria_despesa" class="form-select" required>
@@ -203,11 +223,11 @@
                             <option value="N">Não</option>
                         </select>
                     </div>
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success me-2">Salvar</button>
+                        <button type="reset" class="btn btn-danger">Cancelar</button>
+                    </div>
                 </form>
-                <div class="col-md-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-success me-2">Salvar</button>
-                    <button type="reset" class="btn btn-danger">Cancelar</button>
-                </div>
             </div>
         </c:if>
     </div>
@@ -225,6 +245,9 @@
 
         <table class="table table-hover align-middle">
             <thead class="table-light">
+            <c:forEach var="despesa" items="${listarDespesas}">
+                <c:if test="${despesa.idDespesa ne despesaEdicao.idDespesa}">
+
             <tr>
                 <th>Descrição</th>
                 <th>Valor</th>
@@ -236,6 +259,8 @@
                 <th>Recorrente</th>
                 <th>Ações</th>
             </tr>
+                </c:if>
+            </c:forEach>
             </thead>
             <tbody>
             <c:forEach items="${listaDespesas}" var="despesa">
@@ -249,9 +274,20 @@
                     <td><c:out value="${despesa.statusDespesa}"/></td>
                     <td><c:out value="${despesa.recorrente}"/></td>
                     <td>
-                        <a href="despesa?acao=editar&id=${despesa.idDespesa}" class="btn btn-sm btn-warning" title="Editar"><i class="bi bi-pencil"></i>Editar</a>
-                        <a href="despesa?acao=remover&id=${despesa.idDespesa}" onclick="return confirm('Deseja realmente excluir esta despesa?')" class="btn btn-sm btn-danger" title="Excluir"><i class="bi bi-trash"></i>Excluir</a>
+                        <!-- Botão Editar (inativo) -->
+                        <a href="#" class="btn btn-warning btn-sm disabled" style="opacity: 0.6; cursor: not-allowed;">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+
+                        <!-- Botão Remover (funcional) -->
+                        <a href="despesa?acao=remover&id=${despesa.idDespesa}" class="btn btn-danger btn-sm ms-1"
+                           onclick="return confirm('Tem certeza que deseja remover esta despesa?');">
+                            <i class="bi bi-trash"></i> Remover
+                        </a>
                     </td>
+
+
+
                 </tr>
             </c:forEach>
             </tbody>

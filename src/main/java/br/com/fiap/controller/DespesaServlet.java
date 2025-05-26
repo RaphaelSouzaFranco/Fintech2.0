@@ -92,6 +92,9 @@ public class DespesaServlet extends HttpServlet {
                 case "editar":
                     editar(request, response);
                     break;
+                case "cancelar": // Adicione este case
+                    cancelarEdicao(request, response);
+                    break;
                 case "remover":
                     removerPorId(request, response);
                     break;
@@ -109,10 +112,10 @@ public class DespesaServlet extends HttpServlet {
 
     private void cadastrar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         Despesa despesa = null;
         try {
             despesa = new Despesa();
+
             // validação dos campos obrigatórios
             String descricao = request.getParameter("descricao");
             if (descricao == null || descricao.trim().isEmpty()) {
@@ -175,6 +178,25 @@ public class DespesaServlet extends HttpServlet {
             System.out.println("Dados recebidos para cadastro:");
             request.getParameterMap().forEach((k, v) ->
                     System.out.println(k + "=" + Arrays.toString(v)));
+            String usuarioId = request.getParameter("usuario_id");
+            String contaId = request.getParameter("conta_id");
+
+            if (usuarioId == null || usuarioId.trim().isEmpty()) {
+                throw new ServletException("ID do usuário é obrigatório");
+            }
+            if (contaId == null || contaId.trim().isEmpty()) {
+                throw new ServletException("ID da conta é obrigatório");
+            }
+
+            despesa.setUsuarioId(Integer.parseInt(usuarioId));
+            despesa.setContaId(Integer.parseInt(contaId));
+
+            System.out.println("Dados da despesa antes de cadastrar:");
+            System.out.println("Valor: " + despesa.getValor());
+            System.out.println("Data Pagamento: " + despesa.getDataPagamento());
+            System.out.println("Usuario ID: " + despesa.getUsuarioId());
+            System.out.println("Conta ID: " + despesa.getContaId());
+
 
             despesaDao.cadastrar(despesa);
 
@@ -270,7 +292,9 @@ public class DespesaServlet extends HttpServlet {
 
             request.setAttribute("despesaEdicao", despesa);
             request.getRequestDispatcher("despesa.jsp").forward(request, response);
-            response.sendRedirect(request.getContextPath() + "/despesa?acao=editar");
+
+            // Remova esta linha abaixo que está causando o problema
+            // response.sendRedirect(request.getContextPath() + "/despesa?acao=editar");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -278,6 +302,12 @@ public class DespesaServlet extends HttpServlet {
             request.getRequestDispatcher("erro.jsp").forward(request, response);
         }
     }
+    private void cancelarEdicao(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getSession().removeAttribute("despesaEdicao"); // Remove o objeto da sessão
+        response.sendRedirect("despesa?acao=listar");
+    }
+
 
     protected void atualizar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

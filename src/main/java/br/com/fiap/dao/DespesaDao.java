@@ -13,6 +13,7 @@ public class DespesaDao {
 
     public DespesaDao() throws SQLException, ClassNotFoundException {
         conexao = ConnectionFactory.getConnection();
+        conexao.setAutoCommit(false); // Desabilita autocommit
     }
 
     public void cadastrar(Despesa despesa) throws SQLException {
@@ -38,11 +39,16 @@ public class DespesaDao {
             int linhasAfetadas = stm.executeUpdate();
             System.out.println("Linhas afetadas: " + linhasAfetadas);
 
+            if (linhasAfetadas > 0) {
+                conexao.commit();
+            }
 
         } catch (SQLException e) {
+            conexao.rollback(); // Adicione rollback em caso de erro
             System.err.println("Erro ao cadastrar: " + e.getMessage());
             throw e;
         }
+
     }
 
     public List<br.com.fiap.model.Despesa> pesquisarPorDescricao(String descricao) throws SQLException, EntidadeNaoEncontrada {
