@@ -11,17 +11,17 @@ import java.io.IOException;
 @WebServlet("/cadastrar")
 public class CadastroServlet extends HttpServlet {
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nome = request.getParameter("nome");
-        String email = request.getParameter("email");
-        String senha = request.getParameter("senha");
-        String confirmarSenha = request.getParameter("confirmarSenha");
-
-        CadastroDAO dao = new CadastroDAO();
-
         try {
+            // Recupera os parâmetros do formulário
+            String nome = request.getParameter("nome");
+            String email = request.getParameter("email");
+            String senha = request.getParameter("senha");
+            String confirmarSenha = request.getParameter("confirmarSenha");
+
             // Validações
             if (nome == null || email == null || senha == null || confirmarSenha == null ||
                     nome.trim().isEmpty() || email.trim().isEmpty() || senha.trim().isEmpty()) {
@@ -36,6 +36,8 @@ public class CadastroServlet extends HttpServlet {
                 return;
             }
 
+            CadastroDAO dao = new CadastroDAO();
+
             if (dao.emailExiste(email)) {
                 request.setAttribute("erro", "Este email já está cadastrado!");
                 request.getRequestDispatcher("cadastro.jsp").forward(request, response);
@@ -46,11 +48,12 @@ public class CadastroServlet extends HttpServlet {
             Usuario usuario = new Usuario(nome, email, senha);
             dao.cadastrar(usuario);
 
-            request.setAttribute("sucesso", "Cadastro realizado com sucesso! Faça seu login.");
-            response.sendRedirect("login");
+            request.setAttribute("sucesso", "Usuário cadastrado com sucesso!");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
 
         } catch (Exception e) {
-            request.setAttribute("erro", "Erro ao realizar cadastro: " + e.getMessage());
+            e.printStackTrace();
+            request.setAttribute("erro", "Não foi possível cadastrar o usuário: " + e.getMessage());
             request.getRequestDispatcher("cadastro.jsp").forward(request, response);
         }
     }

@@ -16,7 +16,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-<header class="py-5 text-center bg-primary text-white">
+
+
+<header class="py-5 text-center bg-primary text-white position-relative">
+    <div class="position-absolute top-0 end-0 p-3">
+        <form class="d-flex" role="search">
+            <button class="btn btn-outline-light" type="button" onclick="window.location.href='login.jsp'">Sair</button>
+        </form>
+    </div>
     <div class="container">
         <h1 class="display-4">Bem-vindo(a)!</h1>
         <p class="lead">Escolha uma seção para gerenciar suas finanças</p>
@@ -26,19 +33,7 @@
 <div class="container my-5">
     <div class="row g-4">
 
-        <!-- Card Conta -->
-        <div class="col-12">
-            <div class="card card-conta h-100">
-                <div class="card-body text-center">
-                    <i class="fas fa-wallet fa-3x mb-3 text-primary"></i>
-                    <h3 class="card-title">Conta</h3>
-                    <p class="card-text">Gerencie contas, saldos e tipos bancários.</p>
-                    <a href="${pageContext.request.contextPath}/conta" class="btn btn-primary">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card Receitas -->
+       <!-- Card Receitas -->
         <div class="col-md-6">
             <div class="card h-100">
                 <div class="card-body text-center">
@@ -79,14 +74,14 @@
             </div>
         </div>
 
-        <!-- Cards Categorias -->
+        <!-- Cards Conta -->
         <div class="col-md-6">
             <div class="card h-100">
                 <div class="card-body text-center">
-                    <i class="fas fa-tags fa-3x mb-3 text-info"></i>
-                    <h3 class="card-title">Categorias</h3>
-                    <p class="card-text">Organize despesas e receitas por categoria.</p>
-                    <a href="${pageContext.request.contextPath}/categorias" class="btn btn-info">Acessar</a>
+                    <i class="fas fa-wallet fa-3x mb-3 text-primary"></i>
+                    <h3 class="card-title">Conta</h3>
+                    <p class="card-text">Gerencie contas, saldos e tipos bancários.</p>
+                    <a href="${pageContext.request.contextPath}/conta.jsp" class="btn btn-primary">Acessar</a>
                 </div>
             </div>
         </div>
