@@ -57,7 +57,7 @@ model/: Java entities like User, Income, Expense, etc.
 
 3.**Configure Tomcat and connect to your Oracle database**
 
-🧠 Design Philosophy
+## 🧠 Design Philosophy
 A clean, simple, and user-focused interface built for clarity, usability, and real-world financial management needs.
 
 
