@@ -43,6 +43,10 @@ dao/: Java classes for database operations
 
 model/: Java entities like User, Income, Expense, etc.
 
+## Preview
+
+https://github.com/user-attachments/assets/4e66736c-588b-46f4-9926-6da3c8633f91
+
 
 
 
